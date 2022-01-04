@@ -1,0 +1,72 @@
+# Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP .NET Core service.
+# for local cert run the following commands locally
+# dotnet dev-certs https -ep $env:USERPROFILE\.aspnet\https\v2_dev_cert.pfx -p 123456
+# dotnet dev-certs https --trust
+
+version: '3.4'
+
+services:
+  foundantcoreapi:
+    image: foundantcoreapi
+    build:
+      context: .
+      dockerfile: src/api/Dockerfile
+      args:
+        - NEW_RELIC_LICENSE_KEY=0000000000000000000000000000000000000000
+        - NEW_RELIC_APP_NAME=v2-Debug
+        - NEWRELIC_LOG_LEVEL=off
+    ports:
+      - 5000:5000
+      - 5001:5001
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:5001;http://+:5000
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=123456
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/v2_dev_cert.pfx
+    volumes:
+      - ~/.vsdbg:/remote_debugger:rw
+      - ~/.aspnet/https:/https:ro
+    depends_on:
+      - rabbitmq
+  weathermicroserviceOne:
+    image: weathermicroservice
+    environment:
+      - ServiceName=WeatherService-One
+    build:
+      context: .
+      dockerfile: src/svc/WeatherMicroService/Dockerfile
+    volumes:
+      - ~/.vsdbg:/remote_debugger:rw
+    depends_on:
+      - rabbitmq
+  weathermicroserviceTwo:
+    image: weathermicroservice
+    environment:
+      - ServiceName=WeatherService-Two
+    build:
+      context: .
+      dockerfile: src/svc/WeatherMicroService/Dockerfile
+    volumes:
+      - ~/.vsdbg:/remote_debugger:rw
+    depends_on:
+      - rabbitmq
+  weathermicroserviceThree:
+    image: weathermicroservice
+    environment:
+      - ServiceName=WeatherService-Three
+    build:
+      context: .
+      dockerfile: src/svc/WeatherMicroService/Dockerfile
+    volumes:
+      - ~/.vsdbg:/remote_debugger:rw
+    depends_on:
+      - rabbitmq
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    ports:
+        - 2765:5672
+        - 27651:15672
+    volumes:
+        - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+        - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+
