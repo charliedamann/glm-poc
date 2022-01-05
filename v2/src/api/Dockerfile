@@ -18,7 +18,7 @@ RUN mkdir -p /app/newrelic/logs
 # copy csproj and restore as distinct layers
 FROM mcr.microsoft.com/dotnet/sdk:5.0-alpine AS build
 WORKDIR /src
-COPY ["src/api/Foundant.Core.Api.csproj", "src/api/"]
+COPY ["./Foundant.Core.Api.csproj", "src/api/"]
 RUN dotnet restore "src/api/Foundant.Core.Api.csproj"
 
 # copy everything else and build
