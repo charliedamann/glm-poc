@@ -6,7 +6,6 @@ using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using Foundant.Services.Contracts;
-using Microsoft.Extensions.Logging;
 using System;
 
 namespace Foundant.Core.Api.Controllers
@@ -18,11 +17,10 @@ namespace Foundant.Core.Api.Controllers
 
 		private readonly IWeatherService weatherService;
 		//readonly ISendEndpointProvider _sendEndpoint;
-		//private readonly ILogger _logger;
-		private readonly ILogger<WeatherForecastController> _logger;
-
+		private readonly ILogger _logger;
+		
         //public WeatherForecastController(ILogger logger, IWeatherService weatherService, ISendEndpointProvider sendEndpoint)
-        public WeatherForecastController(ILogger<WeatherForecastController> logger, IWeatherService weatherService)
+        public WeatherForecastController(ILogger logger, IWeatherService weatherService)
         {
             _logger = logger;
 			//_sendEndpoint = sendEndpoint;
@@ -32,14 +30,14 @@ namespace Foundant.Core.Api.Controllers
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {
-			//_logger.Information("Calling Weather Service");
-			//_logger.Debug("Example Debug Message");
-			//_logger.Error("Example Error Message");
-			//_logger.Fatal("Example Fatal Message");
+			_logger.Information("Calling Weather Service");
+			_logger.Debug("Example Debug Message");
+			_logger.Error("Example Error Message");
+			_logger.Fatal("Example Fatal Message");
 
 			var temps = weatherService.Get();
 
-			//_logger.Information("Temps received ${temps}", temps);
+			_logger.Information("Temps received ${temps}", temps);
 
 			return temps.Select(t => new WeatherForecast
 			{
@@ -52,13 +50,13 @@ namespace Foundant.Core.Api.Controllers
         [HttpPost]
         public async Task<ActionResult> Post(string cityName)
         {
-            //_logger.Information($"Submitting message for {cityName}");
+			_logger.Information($"Submitting message for {cityName}");
 
-            //var endpoint = await _sendEndpoint.GetSendEndpoint(new System.Uri("queue:send-city"));
+			//var endpoint = await _sendEndpoint.GetSendEndpoint(new System.Uri("queue:send-city"));
 
-            //await endpoint.Send(new SendCity { Name = cityName });
+			//await endpoint.Send(new SendCity { Name = cityName });
 
-            return Ok();
+			return Ok();
         }
     }
 
