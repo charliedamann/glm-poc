@@ -18,10 +18,12 @@ namespace Foundant.Core.Api
             {
                 Log.Information("Starting v2 stack.");
                 CreateHostBuilder(args).Build().Run();
+                Log.Information("Host Builder Created.");
                 return 0;
             }
             catch (Exception ex)
             {
+                Log.Information("Fatal Error.");
                 Log.Fatal(ex, "Host terminated unexpectedly");
                 return 1;
             }
@@ -39,6 +41,7 @@ namespace Foundant.Core.Api
                     .ReadFrom.Services(services))
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
+                    Log.Information("Executing Startup.");
                     webBuilder.UseStartup<Startup>();
 
                 });
