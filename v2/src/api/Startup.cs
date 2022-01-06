@@ -32,35 +32,35 @@ namespace Foundant.Core.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddMassTransit(x =>
-            //{
-            //    x.SetKebabCaseEndpointNameFormatter();
+			services.AddMassTransit(x =>
+			{
+				x.SetKebabCaseEndpointNameFormatter();
 
-            //    x.AddConsumer<SendCityForecastConsumer>();
+				x.AddConsumer<SendCityForecastConsumer>();
 
-            //    x.UsingRabbitMq((ctx, cfg) =>
-            //    {
-            //        cfg.AutoStart = true;
-            //        cfg.ConfigureEndpoints(ctx);
+				x.UsingRabbitMq((ctx, cfg) =>
+				{
+					cfg.AutoStart = true;
+					cfg.ConfigureEndpoints(ctx);
 
-            //        if (IsRunningInContainer)
-            //        {
-            //            cfg.Host("rabbitmq");
-            //        }
-            //        else
-            //        {
-            //            cfg.Host(new Uri(Configuration["RabbitMQ:ConnectionString"]), h =>
-            //                {
-            //                    h.Username(Configuration["RabbitMQ:Username"]);
-            //                    h.Password(Configuration["RabbitMQ:Password"]);
-            //                });
-            //        }
-            //    });
-            //});
+					if (IsRunningInContainer)
+					{
+						cfg.Host("rabbitmq");
+					}
+					else
+					{
+						cfg.Host(new Uri(Configuration["RabbitMQ:ConnectionString"]), h =>
+							{
+								h.Username(Configuration["RabbitMQ:Username"]);
+								h.Password(Configuration["RabbitMQ:Password"]);
+							});
+					}
+				});
+			});
 
-            //services.AddMassTransitHostedService();
+			services.AddMassTransitHostedService();
 
-            services.AddSingleton<IWeatherService, WeatherService>();
+			services.AddSingleton<IWeatherService, WeatherService>();
 
             services.AddControllers();
 

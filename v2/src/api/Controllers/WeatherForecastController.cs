@@ -16,14 +16,14 @@ namespace Foundant.Core.Api.Controllers
     {
 
 		private readonly IWeatherService weatherService;
-		//readonly ISendEndpointProvider _sendEndpoint;
+		readonly ISendEndpointProvider _sendEndpoint;
 		private readonly ILogger _logger;
 		
         //public WeatherForecastController(ILogger logger, IWeatherService weatherService, ISendEndpointProvider sendEndpoint)
-        public WeatherForecastController(ILogger logger, IWeatherService weatherService)
+        public WeatherForecastController(ILogger logger, IWeatherService weatherService, ISendEndpointProvider sendEndpoint)
         {
             _logger = logger;
-			//_sendEndpoint = sendEndpoint;
+			_sendEndpoint = sendEndpoint;
 			this.weatherService = weatherService;
 		}
 
@@ -52,42 +52,42 @@ namespace Foundant.Core.Api.Controllers
         {
 			_logger.Information($"Submitting message for {cityName}");
 
-			//var endpoint = await _sendEndpoint.GetSendEndpoint(new System.Uri("queue:send-city"));
+			var endpoint = await _sendEndpoint.GetSendEndpoint(new System.Uri("queue:send-city"));
 
-			//await endpoint.Send(new SendCity { Name = cityName });
+			await endpoint.Send(new SendCity { Name = cityName });
 
 			return Ok();
         }
     }
 
-    //public class SendCityForecastConsumer : IConsumer<SendCityForecast>
-    //{
-    //    readonly ILogger _logger;
+	public class SendCityForecastConsumer : IConsumer<SendCityForecast>
+	{
+		readonly ILogger _logger;
 
-    //    public SendCityForecastConsumer(ILogger logger)
-    //    {
-    //        _logger = logger;
-    //    }
+		public SendCityForecastConsumer(ILogger logger)
+		{
+			_logger = logger;
+		}
 
-    //    public Task Consume(ConsumeContext<SendCityForecast> context)
-    //    {
-    //        _logger.Information($"#####################################");
-    //        _logger.Information($"Received forecast:");
-    //        _logger.Information($"City: {context.Message.Name}");
-    //        foreach (var day in context.Message.Temps)
-    //        {
-    //            var forecast = new WeatherForecast
-    //            {
-    //                Date = day.DateTime,
-    //                TemperatureC = day.TemperatureC,
-    //                Summary = day.Summary
-    //            };
+		public Task Consume(ConsumeContext<SendCityForecast> context)
+		{
+			_logger.Information($"#####################################");
+			_logger.Information($"Received forecast:");
+			_logger.Information($"City: {context.Message.Name}");
+			foreach (var day in context.Message.Temps)
+			{
+				var forecast = new WeatherForecast
+				{
+					Date = day.DateTime,
+					TemperatureC = day.TemperatureC,
+					Summary = day.Summary
+				};
 
-    //            _logger.Information($"Forecast: {forecast.Date} : {forecast.TemperatureF} ");
-    //        }
-    //        _logger.Information($"#####################################");
+				_logger.Information($"Forecast: {forecast.Date} : {forecast.TemperatureF} ");
+			}
+			_logger.Information($"#####################################");
 
-    //        return Task.CompletedTask;
-    //    }
-    //}
+			return Task.CompletedTask;
+		}
+	}
 }
