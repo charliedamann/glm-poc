@@ -8,6 +8,7 @@ using Foundant.Services;
 using MassTransit;
 using System;
 using Foundant.Core.Api.Controllers;
+using Serilog;
 
 namespace Foundant.Core.Api
 {
@@ -31,6 +32,7 @@ namespace Foundant.Core.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            Log.Information("AddMassTransit.");
             services.AddMassTransit(x =>
             {
                 x.SetKebabCaseEndpointNameFormatter();
@@ -57,11 +59,17 @@ namespace Foundant.Core.Api
                 });
             });
 
+            Log.Information("AddMassTransitHostedService.");
+
             services.AddMassTransitHostedService();
 
+            Log.Information("WeatherService.");
             services.AddSingleton<IWeatherService, WeatherService>();
 
+            Log.Information("AddControllers.");
             services.AddControllers();
+
+            Log.Information("AddSwaggerGen.");
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Foundant.Core.Api", Version = "v1" });
@@ -71,6 +79,7 @@ namespace Foundant.Core.Api
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            Log.Information("Configure.");
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
