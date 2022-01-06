@@ -18,10 +18,11 @@ namespace Foundant.Core.Api.Controllers
         readonly ISendEndpointProvider _sendEndpoint;
         private readonly ILogger _logger;
 
-        public WeatherForecastController(ILogger logger, IWeatherService weatherService, ISendEndpointProvider sendEndpoint)
+        //public WeatherForecastController(ILogger logger, IWeatherService weatherService, ISendEndpointProvider sendEndpoint)
+        public WeatherForecastController(ILogger logger, IWeatherService weatherService)
         {
             _logger = logger;
-            _sendEndpoint = sendEndpoint;
+            //_sendEndpoint = sendEndpoint;
             this.weatherService = weatherService;
         }
 
@@ -50,9 +51,9 @@ namespace Foundant.Core.Api.Controllers
         {
             _logger.Information($"Submitting message for {cityName}");
 
-            var endpoint = await _sendEndpoint.GetSendEndpoint(new System.Uri("queue:send-city"));
+            //var endpoint = await _sendEndpoint.GetSendEndpoint(new System.Uri("queue:send-city"));
 
-            await endpoint.Send(new SendCity { Name = cityName });
+            //await endpoint.Send(new SendCity { Name = cityName });
 
             return Ok();
         }

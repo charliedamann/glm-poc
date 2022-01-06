@@ -32,44 +32,38 @@ namespace Foundant.Core.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            Log.Information("AddMassTransit.");
-            services.AddMassTransit(x =>
-            {
-                x.SetKebabCaseEndpointNameFormatter();
+            //services.AddMassTransit(x =>
+            //{
+            //    x.SetKebabCaseEndpointNameFormatter();
 
-                x.AddConsumer<SendCityForecastConsumer>();
+            //    x.AddConsumer<SendCityForecastConsumer>();
 
-                x.UsingRabbitMq((ctx, cfg) =>
-                {
-                    cfg.AutoStart = true;
-                    cfg.ConfigureEndpoints(ctx);
+            //    x.UsingRabbitMq((ctx, cfg) =>
+            //    {
+            //        cfg.AutoStart = true;
+            //        cfg.ConfigureEndpoints(ctx);
 
-                    if (IsRunningInContainer)
-                    {
-                        cfg.Host("rabbitmq");
-                    }
-                    else
-                    {
-                        cfg.Host(new Uri(Configuration["RabbitMQ:ConnectionString"]), h =>
-                            {
-                                h.Username(Configuration["RabbitMQ:Username"]);
-                                h.Password(Configuration["RabbitMQ:Password"]);
-                            });
-                    }
-                });
-            });
+            //        if (IsRunningInContainer)
+            //        {
+            //            cfg.Host("rabbitmq");
+            //        }
+            //        else
+            //        {
+            //            cfg.Host(new Uri(Configuration["RabbitMQ:ConnectionString"]), h =>
+            //                {
+            //                    h.Username(Configuration["RabbitMQ:Username"]);
+            //                    h.Password(Configuration["RabbitMQ:Password"]);
+            //                });
+            //        }
+            //    });
+            //});
 
-            Log.Information("AddMassTransitHostedService.");
+            //services.AddMassTransitHostedService();
 
-            services.AddMassTransitHostedService();
-
-            Log.Information("WeatherService.");
             services.AddSingleton<IWeatherService, WeatherService>();
 
-            Log.Information("AddControllers.");
             services.AddControllers();
 
-            Log.Information("AddSwaggerGen.");
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Foundant.Core.Api", Version = "v1" });
@@ -79,7 +73,6 @@ namespace Foundant.Core.Api
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            Log.Information("Configure.");
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
