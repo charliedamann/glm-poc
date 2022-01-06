@@ -60,7 +60,7 @@ namespace Foundant.Core.Api
 
             //services.AddMassTransitHostedService();
 
-            // services.AddSingleton<IWeatherService, WeatherService>();
+            services.AddSingleton<IWeatherService, WeatherService>();
 
             services.AddControllers();
 

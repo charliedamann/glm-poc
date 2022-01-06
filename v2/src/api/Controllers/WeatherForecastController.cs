@@ -16,41 +16,38 @@ namespace Foundant.Core.Api.Controllers
     public class WeatherForecastController : ControllerBase
     {
 
-        //private readonly IWeatherService weatherService;
-        //readonly ISendEndpointProvider _sendEndpoint;
-        //private readonly ILogger _logger;
-        private readonly ILogger<WeatherForecastController> _logger;
+		private readonly IWeatherService weatherService;
+		//readonly ISendEndpointProvider _sendEndpoint;
+		//private readonly ILogger _logger;
+		private readonly ILogger<WeatherForecastController> _logger;
 
         //public WeatherForecastController(ILogger logger, IWeatherService weatherService, ISendEndpointProvider sendEndpoint)
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, IWeatherService weatherService)
         {
             _logger = logger;
-            //_sendEndpoint = sendEndpoint;
-            //this.weatherService = weatherService;
-        }
+			//_sendEndpoint = sendEndpoint;
+			this.weatherService = weatherService;
+		}
 
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {
-            //_logger.Information("Calling Weather Service");
-            //_logger.Debug("Example Debug Message");
-            //_logger.Error("Example Error Message");
-            //_logger.Fatal("Example Fatal Message");
-            List<WeatherForecast> members = new List<WeatherForecast>();
-            members.Add(new WeatherForecast { Date = DateTime.Now, TemperatureC = 1, Summary="Summary" });
-            return members;
+			//_logger.Information("Calling Weather Service");
+			//_logger.Debug("Example Debug Message");
+			//_logger.Error("Example Error Message");
+			//_logger.Fatal("Example Fatal Message");
 
-            //var temps = weatherService.Get();
+			var temps = weatherService.Get();
 
-            //_logger.Information("Temps received ${temps}", temps);
+			//_logger.Information("Temps received ${temps}", temps);
 
-            //return temps.Select(t => new WeatherForecast
-            //{
-            //    Date = t.DateTime,
-            //    TemperatureC = t.TemperatureC,
-            //    Summary = t.Summary
-            //}).ToList();
-        }
+			return temps.Select(t => new WeatherForecast
+			{
+				Date = t.DateTime,
+				TemperatureC = t.TemperatureC,
+				Summary = t.Summary
+			}).ToList();
+		}
 
         [HttpPost]
         public async Task<ActionResult> Post(string cityName)
