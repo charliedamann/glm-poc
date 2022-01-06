@@ -14,8 +14,8 @@ namespace Foundant.Core.Api.Controllers
     public class WeatherForecastController : ControllerBase
     {
 
-        private readonly IWeatherService weatherService;
-        readonly ISendEndpointProvider _sendEndpoint;
+        //private readonly IWeatherService weatherService;
+        //readonly ISendEndpointProvider _sendEndpoint;
         private readonly ILogger _logger;
 
         //public WeatherForecastController(ILogger logger, IWeatherService weatherService, ISendEndpointProvider sendEndpoint)
@@ -23,7 +23,7 @@ namespace Foundant.Core.Api.Controllers
         {
             _logger = logger;
             //_sendEndpoint = sendEndpoint;
-            this.weatherService = weatherService;
+            //this.weatherService = weatherService;
         }
 
         [HttpGet]
@@ -36,7 +36,7 @@ namespace Foundant.Core.Api.Controllers
 
             return new List<WeatherForecast>();
 
-            var temps = weatherService.Get();
+            //var temps = weatherService.Get();
 
             //_logger.Information("Temps received ${temps}", temps);
                         
