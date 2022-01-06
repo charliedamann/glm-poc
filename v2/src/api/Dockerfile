@@ -1,12 +1,14 @@
 FROM mcr.microsoft.com/dotnet/aspnet:5.0-alpine AS base
 WORKDIR /app
-EXPOSE 5000 5001
+# EXPOSE 5000 5001
+EXPOSE 5000
 
 ARG NEW_RELIC_LICENSE_KEY
 ARG NEW_RELIC_APP_NAME
 ARG NEWRELIC_LOG_LEVEL=off
 
-ENV ASPNETCORE_URLS=http://+:5000;https://+5001;
+#ENV ASPNETCORE_URLS=http://+:5000;https://+5001;
+ENV ASPNETCORE_URLS=http://+:5000;
 
 # Creates a non-root user with an explicit UID and adds permission to access the /app folder
 # For more info, please refer to https://aka.ms/vscode-docker-dotnet-configure-containers
