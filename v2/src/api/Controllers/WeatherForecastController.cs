@@ -19,7 +19,7 @@ namespace Foundant.Core.Api.Controllers
         private readonly ILogger _logger;
 
         //public WeatherForecastController(ILogger logger, IWeatherService weatherService, ISendEndpointProvider sendEndpoint)
-        public WeatherForecastController(ILogger logger, IWeatherService weatherService)
+        public WeatherForecastController(ILogger logger)
         {
             _logger = logger;
             //_sendEndpoint = sendEndpoint;
@@ -34,16 +34,18 @@ namespace Foundant.Core.Api.Controllers
             _logger.Error("Example Error Message");
             _logger.Fatal("Example Fatal Message");
 
+            return new List<WeatherForecast>();
+
             var temps = weatherService.Get();
 
-            _logger.Information("Temps received ${temps}", temps);
-
-            return temps.Select(t => new WeatherForecast
-            {
-                Date = t.DateTime,
-                TemperatureC = t.TemperatureC,
-                Summary = t.Summary
-            }).ToList();
+            //_logger.Information("Temps received ${temps}", temps);
+                        
+            //return temps.Select(t => new WeatherForecast
+            //{
+            //    Date = t.DateTime,
+            //    TemperatureC = t.TemperatureC,
+            //    Summary = t.Summary
+            //}).ToList();
         }
 
         [HttpPost]
